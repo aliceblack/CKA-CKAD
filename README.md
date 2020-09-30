@@ -59,7 +59,7 @@ Drain and make unschedulable:
 ```
 kubectl drain node01 --ignore-daemonsets
 ```
-Upgrade node:
+Upgrade worker node:
 * Worker Node Upgraded to v1.18.0
 * Worker Node Ready
 ```
