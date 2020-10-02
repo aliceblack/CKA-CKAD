@@ -48,7 +48,7 @@ apt install kubeadm=1.18.0-00
 kubeadm upgrade apply v1.18.0 
 apt install kubelet=1.18.0-00
 ```
-Master shedulable again:
+Uncordon the control plane node, master will be shedulable again:
 ```
 kubectl uncordon master
 ```
