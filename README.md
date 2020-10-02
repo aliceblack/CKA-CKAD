@@ -53,12 +53,17 @@ Uncordon the control plane node, master will be shedulable again:
 kubectl uncordon master
 ```
 
+### Upgrade additional control plane nodes
+
+Note that `kubeadm upgrade plan` is not needed to upgrade additional control plane nodes.  
+
 Drain and make unschedulable:
 * drain worker node
 * make node unschedulable
 ```
 kubectl drain node01 --ignore-daemonsets
 ```
+
 Upgrade worker node:
 * Worker Node Upgraded to v1.18.0
 * Worker Node Ready
