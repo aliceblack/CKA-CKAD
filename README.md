@@ -64,7 +64,7 @@ Upgrade worker node:
 * Worker Node Ready
 ```
 apt install kubeadm=1.18.0-00
-kubeadm upgrade node
+kubeadm upgrade node                 # upgrade node not upgrade apply!
 apt install kubelet=1.18.0-00
 ```
 
