@@ -1,10 +1,18 @@
+# CKA
+
+## Misc
+
 ```
 kubectl get nodes 
 kubectl get pod -o wide
 kubectl get deployments
+kubectl describe pod 
 ```
 
-## OS Upgrades
+
+## Cluster manteinance
+
+### OS Upgrades
 Empty the node of all applications, mark the node unschedulable:
 * Node node01 becomes unschedulable
 * Pods are evicted from node01
@@ -28,7 +36,7 @@ Make node03 unschedulable, no more app will be scheduled, only the running ones 
 kubectl cordon node03
 ```
 
-## Cluster upgrades
+### Cluster upgrades
 Stable version available for upgrade:
 ```
 kubeadm upgrade plan
@@ -53,7 +61,7 @@ Uncordon the control plane node, master will be shedulable again:
 kubectl uncordon master
 ```
 
-### Upgrade additional control plane nodes
+#### Upgrade additional control plane nodes
 
 Note that `kubeadm upgrade plan` is not needed to upgrade additional control plane nodes.  
 
@@ -73,3 +81,63 @@ kubeadm upgrade node                 # upgrade node not upgrade apply!
 apt install kubelet=1.18.0-00
 ```
 
+## Security
+
+### Certificates
+Show list of certificate signing requests (CSRs):
+```
+kubectl get csr
+```
+
+Approve a CSR:
+```
+kubectl certificate approve john
+```
+
+Inspect a CSR:
+```
+kubectl get csr john -o yaml
+```
+
+Deny and delete a CSR:
+```
+kubectl certificate deny john
+kubectl delete csr agent-smith
+```
+
+In order to reduce the number of old CertificateSigningRequest resources left in a cluster, a garbage collection controller runs periodically. 
+
+### KubeConfig
+
+Get the clusters defined in the default kubeconfig file, you can see context and users too:
+```
+kubectl config view
+kubectl config view --kubeconfig my-kube-config-file
+```
+
+Use context:
+kubectl config --kubeconfig=/root/my-kube-config-file use-context mycontextname
+
+### Roles
+Get roles:
+```
+# on the default namespace
+kubectl get roles
+# on all namespaces
+kubectl get roles --all-namespaces
+# describe a role in a namespace
+kubectl describe role kube-proxy -n kube-system
+```
+
+Run commands as users:
+```
+kubectl get pods --as developer
+```
+
+### Cluster roles
+
+### Image security
+
+### Security context
+
+### Network policies
