@@ -255,6 +255,9 @@ nano /etc/cni/net.d/10-weave.conflist
 ```
 
 ### Deploy Network Solution 
+
+---MISSING---
+
 ### Networking Weave
 ### Service Networking
 ### CoreDNS in Kubernetes
