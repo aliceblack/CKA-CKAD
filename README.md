@@ -8,6 +8,7 @@ kubectl get pod -o wide
 kubectl get deployments
 kubectl describe pod 
 kubectl edit deployment
+kubectl get pods -n kube-system
 ```
 
 
@@ -255,10 +256,23 @@ nano /etc/cni/net.d/10-weave.conflist
 ```
 
 ### Deploy Network Solution 
-
----MISSING---
-
+Deploy weave net, when deployed, any further pods you create will be automatically attached to the Weave network:
+```
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
 ### Networking Weave
+Networking solution:
+```
+/etc/cni/net.d/
+```
+View names of the bridges created by weave on ech node:
+```
+ip link
+```
+IP ranges:
+```
+ip addr show weave
+```
 ### Service Networking
 ### CoreDNS in Kubernetes
 ### Ingress Networking 
