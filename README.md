@@ -189,3 +189,80 @@ The entities that a Pod can communicate with are identified through a combinatio
 kubectl get networkpolicy
 kubectl describe networkpolicy
 ```
+
+
+## Storage
+## Networking
+
+### Explore Environment
+Kluster nodes:
+```
+kubectl get nodes
+```
+Network interfaces:
+```
+ip link
+```
+MAC of the interface:
+```
+ip link show ens3
+```
+MAC of node01:
+```
+arp node01
+```
+Check ip:
+```
+kubectl get nodes -o wide
+```
+Look for a bridge interface created by docker:
+```
+ip link
+```
+State of interface:
+```
+ip link show interface0
+```
+Router thant pinging a site will take:
+```
+ip route show default
+```
+Ports listening:
+```
+netstat -nplt
+```
+ETCD listening on ports:
+```
+netstat -anp | grep etcd
+```
+### Explore CNI weave
+Identify the network plugin configured for Kubernetes:
+```
+ps -aux | grep kubelet
+```
+
+Given  /opt/cni/bin is the cni-bin-dir, list the CNI plugins available:
+```
+ls /opt/cni/bin
+```
+CNI configured on this cluster:
+```
+ls /etc/cni/net.d/ 
+```
+Given /etc/cni/net.d/10-weave.conf is the CNI configured in the cluster, serach for what binary executable file will be run by kubelet after a container and its associated namespace are created:
+```
+nano /etc/cni/net.d/10-weave.conflist
+```
+
+### Deploy Network Solution 
+### Networking Weave
+### Service Networking
+### CoreDNS in Kubernetes
+### Ingress Networking 
+
+
+## Install
+## Troubleshooting
+## Other topics
+## Lightning Labs
+## Mock exams
