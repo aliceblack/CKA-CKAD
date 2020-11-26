@@ -273,6 +273,11 @@ IP ranges:
 ```
 ip addr show weave
 ```
+
+To get the routing ip, enter a pod and then run:
+```
+ip r
+```
 ### Service Networking
 ### CoreDNS in Kubernetes
 ### Ingress Networking 
