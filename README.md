@@ -9,6 +9,7 @@ kubectl get deployments
 kubectl describe pod 
 kubectl edit deployment
 kubectl get pods -n kube-system
+kubectl -n kube-system get pods
 ```
 
 
