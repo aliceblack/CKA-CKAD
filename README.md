@@ -9,7 +9,8 @@ kubectl get deployments
 kubectl describe pod 
 kubectl edit deployment
 kubectl get pods -n kube-system
-kubectl -n kube-system get pods
+#daemons
+kubectl -n kube-system  get ds
 ```
 
 
@@ -280,12 +281,31 @@ To get the routing ip, enter a pod and then run:
 ip r
 ```
 ### Service Networking
-IP range of the pods on the cluster: The network is configured with weave. Check the weave pods logs using command kubectl logs <weave-pod-name> weave -n kube-system and look for ipalloc-range.
+IP range of the pods on the cluster: The network is configured with weave. Check the weave pods logs using 
+```command kubectl logs <weave-pod-name> weave -n kube-system``` 
+and look for ipalloc-range.
 
 Cluster ip range:
+```
 cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+```
 
 ### CoreDNS in Kubernetes
+Ip allocation range of wave:
+```
+kubectl -n kube-system get pods
+kubectl -n kube-system logs  <wave-pod-name> -c <wave-container-name>
+```
+Type of proxy the kube-proxy is configured to use:
+```
+kubectl -n kube-system logs  <proxy-pod-name> 
+```
+
+Deamons, check if kube-proxy is deployed ad daemon:
+```
+kubectl -n kube-system  get ds
+```
+
 ### Ingress Networking 
 
 
