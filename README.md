@@ -198,7 +198,7 @@ kubectl describe networkpolicy
 ## Networking
 
 ### Explore Environment
-Kluster nodes:
+Cluster nodes:
 ```
 kubectl get nodes
 ```
@@ -262,6 +262,7 @@ Deploy weave net, when deployed, any further pods you create will be automatical
 ```
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
+
 ### Networking Weave
 Networking solution:
 ```
@@ -280,17 +281,7 @@ To get the routing ip, enter a pod and then run:
 ```
 ip r
 ```
-### Service Networking
-IP range of the pods on the cluster: The network is configured with weave. Check the weave pods logs using 
-```command kubectl logs <weave-pod-name> weave -n kube-system``` 
-and look for ipalloc-range.
 
-Cluster ip range:
-```
-cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
-```
-
-### CoreDNS in Kubernetes
 Ip allocation range of wave:
 ```
 kubectl -n kube-system get pods
@@ -304,6 +295,44 @@ kubectl -n kube-system logs  <proxy-pod-name>
 Deamons, check if kube-proxy is deployed ad daemon:
 ```
 kubectl -n kube-system  get ds
+```
+
+
+### Service Networking
+Ip addresses:
+```
+ip addr
+```
+
+IP range of the pods on the cluster: The network is configured with weave. Check the weave pods logs using 
+```command kubectl logs <weave-pod-name> weave -n kube-system``` 
+and look for ipalloc-range.
+
+Cluster ip range:
+```
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+```
+
+### CoreDNS in Kubernetes
+Services:
+```
+kubectl get service -n kube-system
+```
+
+Check where is the configuration file located for configuring the CoreDNS service,
+inspect the Args of the coredns deployment and check the file used, example: 
+```
+kubectl -n kube-system describe deployments.apps coredns | grep -A2 Args | grep Corefile
+```
+
+Get configmap:
+```
+kubectl get configmap -n kube-system
+```
+
+Describe configmap:
+```
+kubectl describe configmap coredns -n kube-system 
 ```
 
 ### Ingress Networking 
