@@ -11,6 +11,9 @@ kubectl edit deployment
 kubectl get pods -n kube-system
 #daemons
 kubectl -n kube-system  get ds
+kubectl get all --all-namespaces
+kubectl get <resource name> --all-namespaces
+kubectl get deploy --all-namespaces
 ```
 
 
@@ -336,7 +339,20 @@ kubectl describe configmap coredns -n kube-system
 ```
 
 ### Ingress Networking 
+Check host configured, run the command and look at Host under the Rules section:
+```
+kubectl describe ingress --namespace <namespace>
+```
 
+Run the command and look under the Rules section to see backend is the path on the Ingress configured with:
+```
+kubectl describe ingress --namespace <namespace>
+```
+
+Change the path to the video  applications:
+```
+kubectl edit ingress --namespace <namespace>
+```
 
 ## Install
 ## Troubleshooting
