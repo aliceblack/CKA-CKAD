@@ -354,6 +354,21 @@ Change the path to the video  applications:
 kubectl edit ingress --namespace <namespace>
 ```
 
+Create an ingress from zero:
+```
+kubectl create namespace ingress-space
+kubectl create configmap nginx-configuration --namespace ingress-space
+kubectl create serviceaccount ingress-serviceaccount --namespace ingress-space
+#someone created the Roles and RoleBindings for the ServiceAccount
+kubectl get roles,rolebindings --namespace ingress-space
+#create a deployment file then deploy
+kubectl apply -f deployment.yaml
+#create a service to make Ingress available to external users
+kubectl apply -f service.yaml
+kubectl expose deployment -n ingress-space ingress-controller --type=NodePort --port=80 --name=ingress --dry-run -o yaml >ingress.yaml
+```
+
+
 ## Install
 ## Troubleshooting
 ## Other topics
