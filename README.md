@@ -11,6 +11,7 @@ kubectl edit deployment
 kubectl get pods -n kube-system
 #daemons
 kubectl -n kube-system  get ds
+kubectl get all
 kubectl get all --all-namespaces
 kubectl get <resource name> --all-namespaces
 kubectl get deploy --all-namespaces
@@ -406,7 +407,11 @@ vi web.yaml
 controlplane $ kubectl create -f web.yaml
 ```
 
+### Control plane failure
 
+```
+kubectl scale deployment app --replicas=2
+```
 ## Other topics
 ## Lightning Labs
 ## Mock exams
