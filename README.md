@@ -14,6 +14,8 @@ kubectl -n kube-system  get ds
 kubectl get all --all-namespaces
 kubectl get <resource name> --all-namespaces
 kubectl get deploy --all-namespaces
+# gett all pods, services, deployments and replica sets from a namespace
+kubectl -n <namespace> get all
 ```
 
 
@@ -371,6 +373,40 @@ kubectl expose deployment -n ingress-space ingress-controller --type=NodePort --
 
 ## Install
 ## Troubleshooting
+### Application failures
+```
+controlplane $ kubectl -n <namespace> get svc
+controlplane $ kubectl -n <namespace> get svc mysql -o yaml > mysql-service.yaml
+controlplane $ kubectl -n <namespace> delete svc mysql
+service "mysql" deleted
+controlplane $ vi mysql-service.yaml
+#do stuff
+controlplane $ kubectl create -f mysql-service.yaml
+```
+
+```
+controlplane $ kubectl -n <namespace> describe pod mysql
+controlplane $ kubectl -n <namespace> delete  svc mysql-service
+service "mysql-service" deleted
+controlplane $ kubectl -n <namespace> expose pod mysql --name=mysql-serve
+service/mysql-serve exposed
+controlplane $ kubectl -n <namespace> get ep
+NAME          ENDPOINTS         AGE
+mysql-serve   10.244.1.8:3306   113s
+web-service   10.244.1.9:8080   5m3s
+```
+
+```
+controlplane $ kubectl -n delta describe deployments webapp-mysql
+#check enviroment, you could find wrong sql credentials
+controlplane $ kubectl -n delta get deployment webapp-mysql -o yaml >  web.yaml
+controlplane $ kubectl delete deployments.webapp-mysql -n delta
+vi web.yaml
+#do stuff
+controlplane $ kubectl create -f web.yaml
+```
+
+
 ## Other topics
 ## Lightning Labs
 ## Mock exams
