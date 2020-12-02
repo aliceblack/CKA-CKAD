@@ -373,6 +373,9 @@ kubectl expose deployment -n ingress-space ingress-controller --type=NodePort --
 
 
 ## Install
+
+
+
 ## Troubleshooting
 ### Application failures
 ```
@@ -408,10 +411,36 @@ controlplane $ kubectl create -f web.yaml
 ```
 
 ### Control plane failure
-
 ```
 kubectl scale deployment app --replicas=2
 ```
+### Worker node failure
+```
+controlplane $ kubectl get nodes
+controlplane $ ssh <nodename>
+root@node01:~# ps -ef | grep -i kubelet
+root@node01:~# systemctl status kubelet.service
+root@node01:~# systemctl status kubelet.service -l
+root@node01:~# service kubelet start
+root@node01:~# systemctl status kubelet.service -l
+root@node01:~# journalctl -u kubelet -f
+root@node01:~# exit
+controlplane $ kubectl describe node node01
+controlplane $ ssh <nodename>
+root@node01:~# journalctl -u kubelet -f
+root@node01:~# cd /etc/systemd/system/kubelet.service.d/
+root@node01:/etc/systemd/system/kubelet.service.d# ls
+10-kubeadm.confroot@node01:/etc/systemd/system/kubelet.service.d#
+root@node01:/etc/systemd/system/kubelet.service.d# cat 10-kubeadm.conf
+root@node01:~# vi 10-kubeadm.conf
+root@node01:~# systemctl deamon-reload
+root@node01:~# systemctl restart kubelet
+root@node01:~# systemctl status kubelet.service -l
+master $ kubectl cluster-info
+```
+
+### Troubleshoot network
+
 ## Other topics
 ## Lightning Labs
 ## Mock exams
