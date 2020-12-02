@@ -440,7 +440,20 @@ master $ kubectl cluster-info
 ```
 
 ### Troubleshoot network
-
+```
+#fix
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+#fix
+kubectl -n kube-system logs <kube-proxy-pod>
+kubectl -n kube-system describe configmap kube-proxy
+controlplane $ kubectl get pods -n kube-system
+controlplane $ kubectl -n kube-system edit ds kube-proxy
+daemonset.apps/kube-proxy edited
+controlplane $ kubectl get pods -n kube-system
+#fix
+controlplane $ kubectl -n kube-system get ep kube-dns
+controlplane $ kubectl -n kube-system edit svc kube-dns
+```
 ## Other topics
 ## Lightning Labs
 ## Mock exams
