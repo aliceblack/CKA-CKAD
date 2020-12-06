@@ -373,9 +373,36 @@ kubectl expose deployment -n ingress-space ingress-controller --type=NodePort --
 
 
 ## Install
-
-
-
+```
+#Install the kubeadm package on master and node01
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
+sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+systemctl daemon-reload
+systemctl restart kubelet
+#ssh node01
+#repeat the commands
+#get the version
+kubelet --version
+#bootstrap a kubernetes cluster using kubeadm
+kubeadm init
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+#join node01 to the cluster using the join token
+ssh node01
+kubeadm join 172.17.0.55:6443 --token xtj6l9.upmdnpr74daurw04 \
+    --discovery-token-ca-cert-hash sha256:4ace90cb58f9f614caf1280176356de73508582cbdf7dea987fe00f8f7d08568
+```
 ## Troubleshooting
 ### Application failures
 ```
@@ -455,5 +482,24 @@ controlplane $ kubectl -n kube-system get ep kube-dns
 controlplane $ kubectl -n kube-system edit svc kube-dns
 ```
 ## Other topics
+
+### Practice JSON Path
+You can use JSON path notation to get information from the Kubernetes API. You can personalize result columns combined with JSON path queries.
+```
+kubectl get pods -o json
+kubectl get pods -o=jsonpath='{.items[0].metadata.name}'
+kubectl get nodes -o=custom-columns=NODE:.metadata.name, CPU:.status.capacity.cpu
+kubectl get nodes --sort-by=.metadata.name
+```
+### Practice Test - Advanced Kubectl Commands
+```
+#store the list of nodes in json format:
+kubectl get nodes -o json > /opt/outputs/nodes.json
+#store details of the node node01 in json format
+kubectl get node node01 -o json > /opt/outputs/node01.json
+#JSON PATH query to fetch node names and store them
+kubectl get nodes -o=jsonpath='{.items[*].metadata.name}' > /opt/outputs/node_names.txt
+```
+
 ## Lightning Labs
 ## Mock exams
