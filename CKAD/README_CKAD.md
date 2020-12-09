@@ -15,9 +15,10 @@ Useful commands:
 ```
 kubectl get cluster-info
 kubectls get nodes
+kubectl get all
 ```
 
-Kubectl commands:
+Kubectl advanced commands:
 ```
 # Format using -o json, -o wide, -o yaml
 kubectl get pods -o wide
@@ -57,5 +58,27 @@ kubectl create -f definition.yml
 kubectl get replicationcontroller
 # pods of the replication controller be named with the replication controller name as prefix
 kubectl get pods
+```
 
+Update replica sets:
+```
+kubectl replace -f repilicaset.yml
+#or
+kubectl scale --replicas=3 -f repilicaset.yml
+#or
+kubectl scale --replicas=3 replicaset <replicaset-name>
+```
+
+If you delete a replicaset, all pods will be deleted.
+
+## Namespaces
+You can use namespace on yaml definitions or evenspecify --namespace=<namespace> when creating the pods.
+You can even change context to avoid typing the name space every time:
+```
+kubect config set-context $(kubectl config current-context) --namespace=<namespace>
+#following commands will refer to that namespace
+```
+Show all:
+```
+kubectl get pods --all-namespace
 ```
