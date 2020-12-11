@@ -102,6 +102,13 @@ kubectl scale --replicas=3 replicaset <replicaset-name>
 
 If you delete a replicaset, all pods will be deleted.
 
+## Deployments
+```
+kubectl get deployment
+kubectl describe deployment <deployment>
+kubectl get deployment <deployment> -o yaml
+```
+
 ## Namespaces
 You can use namespace on yaml definitions or evenspecify --namespace=<namespace> when creating the pods.
 You can even change context to avoid typing the name space every time:
