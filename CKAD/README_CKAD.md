@@ -78,15 +78,20 @@ pod/nginx created
 ```
 
 ## Replica sets
-Replica tests can create pods or manager existing rpods.
+Replica sets can create pods or manager existingr pods.
 ```
+kubectl get replicaset
+kubectl describe replicaset <replicaset>
+kubectl delete replicaset <replicaset>
 kubectl create -f definition.yml
+#delete and re-create the ReplicaSet or update the existing ReplicSet and then delete all PODs, so new ones with the correct image will be created
+kubectl edit replicaset <replica-set>
 kubectl get replicationcontroller
 # pods of the replication controller be named with the replication controller name as prefix
 kubectl get pods
 ```
 
-Update replica sets:
+Update replica sets, use 'kubectl scale' command or edit the replicaset using 'kubectl edit replicaset':
 ```
 kubectl replace -f repilicaset.yml
 #or
