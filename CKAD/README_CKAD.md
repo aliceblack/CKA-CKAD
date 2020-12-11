@@ -14,7 +14,7 @@ Worker node:
 Useful commands:
 ```
 kubectl get cluster-info
-kubectls get nodes
+kubectl get nodes
 kubectl get all
 ```
 
@@ -45,10 +45,36 @@ Useful commands:
 ```
 kubectl get pods
 kubectl describe pod <pod-name>
+controlplane $ kubectl create -f definition.yaml
 #get a pod definition, to reacreate the pod you must delete the current pod
 kubectl get pod <pod-name> -o yaml > pod-definition.yaml
+#use 'kubectl apply' command with a file or use 'kubectl edit pod <pod>' to edit a pod
+controlplane $ kubectl edit pod <pod>
 #edit pod properties
 kubectl edit pod <pod-name>
+#delete
+controlplane $ kubectl delete pod webapp
+```
+
+Creating a pod:
+```
+controlplane $ kubectl run nginx --image=nginx --dry-run=client -o yaml
+apiVersion: v1kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+controlplane $ kubectl run nginx --image=nginx
+pod/nginx created
 ```
 
 ## Replica sets
