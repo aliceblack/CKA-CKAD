@@ -54,6 +54,12 @@ controlplane $ kubectl edit pod <pod>
 kubectl edit pod <pod-name>
 #delete
 controlplane $ kubectl delete pod webapp
+#Exposing service on a port
+kubectl expose pod <pod> --port=<port> --name <service-name>
+# expose pod
+kubectl run custom-nginx --image=nginx --port=8080
+#create pod and service
+kubectl run <pod-name> --image=<image> --port=80 --expose
 ```
 
 Creating a pod:
@@ -89,6 +95,9 @@ kubectl edit replicaset <replica-set>
 kubectl get replicationcontroller
 # pods of the replication controller be named with the replication controller name as prefix
 kubectl get pods
+# create with imperative commands then scale
+kubectl create deployment webapp --image=<image>
+kubectl scale deployment/webapp --replicas=3
 ```
 
 Update replica sets, use 'kubectl scale' command or edit the replicaset using 'kubectl edit replicaset':
@@ -107,16 +116,28 @@ If you delete a replicaset, all pods will be deleted.
 kubectl get deployment
 kubectl describe deployment <deployment>
 kubectl get deployment <deployment> -o yaml
+kubectl create deployment <deployment-name> --namespace=<namespace> --image=<image> --replicas=2
 ```
 
 ## Namespaces
-You can use namespace on yaml definitions or evenspecify --namespace=<namespace> when creating the pods.
+You can use namespace on yaml definitions or evenspecify `--namespace=<namespace>` when creating the pods.
 You can even change context to avoid typing the name space every time:
 ```
+
 kubect config set-context $(kubectl config current-context) --namespace=<namespace>
 #following commands will refer to that namespace
 ```
+
 Show all:
 ```
-kubectl get pods --all-namespace
+kubectl get pods --all-namespaces
+kubectl get namespace
+```
+
+Create:
+```
+#create namespace
+kubectl create ns <namespace-name>
+#create pod
+kubectl run <podname> --image=<image> --namespace=<namespace>
 ```
