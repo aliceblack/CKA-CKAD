@@ -83,6 +83,30 @@ controlplane $ kubectl run nginx --image=nginx
 pod/nginx created
 ```
 
+## Containers
+Containers run tasks and processes, at completion they do exit. 
+```
+CMD ["nginx"]
+$ docker run ubuntu [COMMAND]
+$ docker run ubuntu sleep 5
+FROM Ubuntu
+CMD sleep 5
+CMD ["command","param"]
+CMD ["sleep", "5"]
+$ docker build -t ubuntu-sleeper .
+$ docker run ubuntu-sleeper
+$ docker run ubuntu-sleeper sleep 10
+FROM Ubuntu
+ENTRYPOINT ["sleep"]
+$ docker run ubuntu-sleeper 10
+FROM Ubuntu
+ENTRYPOINT ["sleep"]
+CMD ["5"]
+$ docker run ubuntu-sleeper
+$ docker run ubuntu-sleeper 10
+$ docker run --entrypoint moreinterestingcommand ubuntu-sleeper 10
+```
+
 ## Replica sets
 Replica sets can create pods or manager existingr pods.
 ```
