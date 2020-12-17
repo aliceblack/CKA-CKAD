@@ -285,7 +285,7 @@ volumes:
 #notethat they will be stored as separate files in the container, the file name will be the secret variable key and the content of the file will be the secret variable value 
 ```
 
-## Users
+### Users
 Run as user:
 ```
 docker run --user=1000 ubuntu sleep 5000
@@ -298,3 +298,101 @@ USER 1000
 ```
 
 In a pod definition file it can be set a securityContext tag either in `spec` or in `containers` tags on a specific container.
+Container settings will overwrite pod settings.
+You can use `--cap-add` and `--cap-drop` to manage Linux capabilities. Use `--privileged` to give extended privileges and `--device=[]` to run devices insede teh container without the `--privileged` flag.
+
+### Service Accounts
+Accounts: 
+* user accounts
+* service accounts
+
+When creating a a service account, an account is created and a token si generated, then K8s creates a secret object, stores the token in the secret object and link the secret object to the account. The token is an authetnication bearer for the Kuberntes APIs.
+```
+kubectl create serviceaccount <name>
+kubectl get serviceaccount
+kubectl describe serviceaccount <name>
+kubectl describe secret <name>
+```
+
+Each namespace has a service account. Any pod created has the secret automatically mounted as a volume.
+You must delete and reacreate the pod if you plan to change service account, if you edit a deplyment it will do it automatically instead.
+
+```
+...
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+    serviceAccount: nginxServiceAccount
+```
+
+```
+...
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+    automountServiceAccountToken: false
+```
+
+### Memory
+When a pod tries to surpass the CPU limit, the CPU does get throttled, so it does not surpass the limit, but when memory limit is surpassed constantly (it can!), it gest terminated. 
+```
+...
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      resources:
+         requests:
+           memory: "1Gi"
+           cpu: 1
+         limits:
+           memory: "2Gi"
+           cpu: 2
+```
+
+### Taints and tolerations
+Pod placement in nodes by the scheduler.
+Taint is placed on nodes, it prevents pod placement. Natively any created pod can not be placed where a taint has be applied. A toleration allow pods to be blaced where a taint has be placed. Toleration is placed on pods. Use node affinity to place pods on nodes. Master has an automatic taint.
+```
+kubectl taint nodes <node> key=value:<taint-effect>
+kubectl taint nodes <node> key=value:NoSchedule
+kubectl describe node kubemaster | grep taint
+```
+* NoSchedule
+* PreferNoSchedule, not guerantee
+* NoExecute
+
+```
+...
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      resources:
+  tolerations:
+  - key: "temperature"
+    operator: "Equal"
+    value: "centigrades"
+    effect: "NoSchedule"
+```
+### Node selectors
+Node selectors and node affinities. Selectors are not suited for more than one label, use node affinity and anti affinity.
+```
+kubectl label nodes <node> <key>=<value>
+
+...
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      resources:
+  nodeSelector:
+    size: <lable>          # is a lable assigned to a node, you must fisrt lable a node
+```
+
+Node affinity types:
+* requiredDuringSchedulingIgnoredDuringExecution 
+* preferredDuringSchedulingIgnoredDuringExecution
+* (more to come in the future)
