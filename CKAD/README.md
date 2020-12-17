@@ -284,3 +284,15 @@ volumes:
     secretName: project-secret
 #notethat they will be stored as separate files in the container, the file name will be the secret variable key and the content of the file will be the secret variable value 
 ```
+
+## Users
+Run as user:
+```
+docker run --user=1000 ubuntu sleep 5000
+```
+
+Or user id in file:
+```
+FROM ubuntu
+USER 1000
+```
