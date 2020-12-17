@@ -296,3 +296,5 @@ Or user id in file:
 FROM ubuntu
 USER 1000
 ```
+
+In a pod definition file it can be set a securityContext tag either in `spec` or in `containers` tags on a specific container.
