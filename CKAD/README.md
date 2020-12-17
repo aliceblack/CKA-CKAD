@@ -165,3 +165,122 @@ kubectl create ns <namespace-name>
 #create pod
 kubectl run <podname> --image=<image> --namespace=<namespace>
 ```
+
+## Configuration
+### Config maps
+Enviroment variables can be set using the `env` tag of a pod definition file, the tag is an array and every variable can be created using name and value properties or name and valueFrom properties. Check some different configurationfiles here:
+```
+...
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    env:
+      - name: TEMPERATURE
+        value: fahrenheit
+```
+
+```
+#using valueFrom
+env:
+  - name: TEMPERATURE
+    valueFrom: 
+      configMapKeyRef:
+        name: project-configmap
+        key: TEMPERATURE
+      
+env:
+  - name: TEMPERATURE
+    valueFrom: 
+      secretKeyRef:
+      
+#using volumes
+volumes:
+- name: project-volume
+  configMap:
+    name: project-configmap
+```
+
+ConfigMap is a key value pair map. A config map can be created by commands:
+```
+  kubectl create configmap  <name> --from-literal=TEMPERATURE=fahrenheit --from-literal=COLOR=blue
+```
+or files:
+```
+#from properties file
+kubectl create configmap --from-file=configuration.properties
+
+#from configmap definition file
+kubectl create -f configuration.yaml
+```
+
+Definition:
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: newconfig
+data:
+ TEMPERATURE: fahrenheit 
+ COLOR: blue
+```
+
+Commands:
+```
+kubectl get configmaps
+kubectl describe configmaps
+```
+
+Definitions:
+```
+...
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    envFrom:
+    - configMapRef:
+        name: project-configmap
+```
+
+## Secrets
+Config maps store data as playntext. Secrets do encode in base64.
+```
+kubectl create secret generic <name> --from-literal=<secret-name>=<value> --from-literal=<secret-name>=<value>
+kubectl create secret generic <name> --from-file=<secrets>
+kubectl create -f definition.yaml
+kubectl get secrets
+kubectl describe secrets
+kubect get secret project-secrets -o yaml
+```
+
+Definitions:
+```
+apiVersion: v1
+kind: secret
+  name: project-secrets
+data:
+  USERNAME: rGDFXGDFSsv==
+  PASSWORD:  esFDfreg==
+```
+
+Using in pods:
+```
+envFrom: 
+   - secretRef:
+        name: project-secret
+#or        
+env:
+  - name: TEMPERATURE
+    valueFrom: 
+      secretKeyRef:
+        name: project-secret
+        key: TEMP
+        
+#or using volumes
+volumes:
+- name: project-secret-volume
+  secret:
+    secretName: project-secret
+#notethat they will be stored as separate files in the container, the file name will be the secret variable key and the content of the file will be the secret variable value 
+```
