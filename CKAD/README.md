@@ -107,6 +107,8 @@ $ docker run ubuntu-sleeper 10
 $ docker run --entrypoint moreinterestingcommand ubuntu-sleeper 10
 ```
 
+The entrypoint is overridden in the pod definition, entrypoint defined in image, gets overridden in pod definition.
+
 ## Replica sets
 Replica sets can create pods or manager existingr pods.
 ```
@@ -396,3 +398,7 @@ Node affinity types:
 * requiredDuringSchedulingIgnoredDuringExecution 
 * preferredDuringSchedulingIgnoredDuringExecution
 * (more to come in the future)
+
+## Config mpas
+
+kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue
