@@ -124,6 +124,8 @@ kubectl get pods
 # create with imperative commands then scale
 kubectl create deployment webapp --image=<image>
 kubectl scale deployment/webapp --replicas=3
+#created with replicas
+kubectl create deployment blue --image=nginx --replicas=6
 ```
 
 Update replica sets, use 'kubectl scale' command or edit the replicaset using 'kubectl edit replicaset':
@@ -358,7 +360,7 @@ spec:
 Pod placement in nodes by the scheduler.
 Taint is placed on nodes, it prevents pod placement. Natively any created pod can not be placed where a taint has be applied. A toleration allow pods to be blaced where a taint has be placed. Toleration is placed on pods. Use node affinity to place pods on nodes. Master has an automatic taint.
 ```
-kubectl taint nodes <node> key=value:<taint-effect>
+kubectl taint nodes <node> <key>=<value>:<taint-effect>
 kubectl taint nodes <node> key=value:NoSchedule
 kubectl describe node kubemaster | grep taint
 ```
@@ -383,6 +385,7 @@ spec:
 Node selectors and node affinities. Selectors are not suited for more than one label, use node affinity and anti affinity.
 ```
 kubectl label nodes <node> <key>=<value>
+kubectl label node node01 color=blue
 
 ...
 spec:
@@ -429,6 +432,7 @@ Pod definition:
 ```
 
 Open shell on the pod:
+
 ```
 kubectl exec --stdin --tty ubuntu-sleeper -- /bin/bash
 ```
@@ -436,4 +440,41 @@ kubectl exec --stdin --tty ubuntu-sleeper -- /bin/bash
 ## Service account
 ```
 kubectl create serviceaccount <name>
+```
+
+## Taints and tolerations
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+  - key: "example-key"
+    operator: "Exists"
+    effect: "NoSchedule"
+```
+
+Remove taint from master:
+```
+kubectl taint nodes master/controlplane node-role.kubernetes.io/master:NoSchedule-
+```
+
+```
+containers:
+ ...
+nodeAffinity:
+  requiredDuringSchedulingIgnoredDuringExecution
+    nodeSelectorTerms:
+    - matchExpression:
+      - key: color
+        operator: In
+        values:
+        - blue
 ```
