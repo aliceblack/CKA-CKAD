@@ -400,5 +400,40 @@ Node affinity types:
 * (more to come in the future)
 
 ## Config mpas
+```
+kubectl create configmap webapp-config-map --from-literal=APP_COLOR=blue
+```
 
-kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue
+## Security context
+Check the user running the container:
+```
+kubectl exec ubuntu-sleeper -- whoami
+```
+
+Pod definition:
+```
+spec:
+  securityContext:
+    runAsUser: 1010
+  containers:
+    ...
+```
+
+Pod definition:
+```
+  image: ubuntu
+  name: ubuntu-sleeper
+  securityContext:
+    capabilities:
+    add: ["SYS_TIME"]
+```
+
+Open shell on the pod:
+```
+kubectl exec --stdin --tty ubuntu-sleeper -- /bin/bash
+```
+
+## Service account
+```
+kubectl create serviceaccount <name>
+```
