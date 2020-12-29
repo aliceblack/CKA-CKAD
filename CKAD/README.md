@@ -479,6 +479,18 @@ nodeAffinity:
         - blue
 ```
 
+## Status and conditions
+Statuses:
+* Pending (waiting to be scheduled on a node)
+* ContainerCreating
+* Running
+
+Conditions:
+* PodScheduled
+* Initialized
+* ContainersReady
+* Ready
+
 ## Readiness probes
 
 Pod definitions with readiness probes:
@@ -580,8 +592,78 @@ logs -f <pod-name>
 logs -f <pod-name> <container-of-the-pod>
 ```
 
+## Labels
+Pod definition:
+```
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: webap
+  labels:
+    application: gui
+    mode: mobile
+    
+```
+Get the pod using the lables:
+```
+kubectl get pods --selector application=gui
+```
+
+Replica set definition:
+```
+apiVersion: apps/v1 
+kind: ReplicaSet
+metadata: #lables of the replica sets itself, we are not talking about these
+  name: webapp
+  labels:
+    application: gui
+    mode: mobile
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      application: gui
+  template:
+    metadata:
+      labels:
+        application: webapp
+        mode: mobile
+    spec:
+      containers:
+      - name: webapp
+        image: webapp
+```
+
 ## Monitoring
 Metrics server is required for CKAD, but other solutions are available.
 The Metrics server store info in memory, there is no historic data. Container advisor exposes metrics through the Kubelet API, used by the Metrics server.
 
 If you use minikube, do `minikube addons enable metric-server`, otherwise clone from git and deploy using kubectl.
+
+## Labels and selectors
+
+## Rolling updates
+Rolling updates is the default update strategy. Recreate will shutdown every instance and then create all the new sitances, Rolling update will do it one by one.
+
+When you ask kubectl to describe the deployments, with recreate the old replica gets scaled to 0, and the the new replica kicks in, with rolling the replicas are seen to be decreased by one (the old replica) and increased by one (the new replica) at the same time. 
+
+```
+kubectl rollout status deployment/webapp-deployment
+#edit image or use apply command using a definiton file 
+kubectl apply -f deployment.yaml
+kubectl set image deployment/webapp-deployment nginx=nginx:latest
+#to bring up the old pods do a rollback
+kubectl rollout undo deployment/webapp-deployment
+#status
+kubectl rollout status deployment/webapp-deployment
+kubectl rollout history deployment/webapp-deployment
+```
+
+If you edit the container image (version) and then use the apply command, a new rollout is triggered. Otherwise you can use 
+the command  `kubectl set image deployment/webapp-deployment nginx=nginx:latest`.
+
+Use the `--revision=<revision-number>` flag to see the status of a revision, `kubectl rollout status deployment/webapp-deployment --revision=3`, use the `--record` flag to add the command used to update a delployment to teh revision number, `kubectl set image deployment nginx nginx=nginx:latest --record`.
+
+  
+## Jobs
+Creates pods until the desired numberof succesful completed jobs is reached.
