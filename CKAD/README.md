@@ -507,9 +507,9 @@ spec:
       httpGet:
         path: /api/ready
         port: 8080
-      initialDelaySeconds: 10 #additional deleya
+      initialDelaySeconds: 20 #additional deleya
       periodSeconds: 5 #how often to probe
-      failureThreshold: 8 #default is 3
+      failureThreshold: 10 #default is 3
 ```
 
 ```
@@ -523,7 +523,7 @@ spec:
       exec:
         command: 
         - cat
-        - /app/is_ready
+        - /app/isready
 ```
 ## Liveness probes
 Liveness probes are defined just like the readiness probes:
@@ -552,9 +552,9 @@ spec:
       httpGet:
         path: /api/ready
         port: 8080
-      initialDelaySeconds: 10 #additional deleya
+      initialDelaySeconds: 20 #additional deleya
       periodSeconds: 5 #how often to probe
-      failureThreshold: 8 #default is 3
+      failureThreshold: 10 #default is 3
 ```
 
 ```
@@ -568,5 +568,20 @@ spec:
       exec:
         command: 
         - cat
-        - /app/is_ready
+        - /app/isready
 ```
+
+## Logs
+Multiple containers pod require you to specify the name of the contianer:
+```
+#single container pod
+logs -f <pod-name>
+#multy container pod
+logs -f <pod-name> <container-of-the-pod>
+```
+
+## Monitoring
+Metrics server is required for CKAD, but other solutions are available.
+The Metrics server store info in memory, there is no historic data. Container advisor exposes metrics through the Kubelet API, used by the Metrics server.
+
+If you use minikube, do `minikube addons enable metric-server`, otherwise clone from git and deploy using kubectl.
