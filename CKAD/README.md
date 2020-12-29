@@ -666,4 +666,48 @@ Use the `--revision=<revision-number>` flag to see the status of a revision, `ku
 
   
 ## Jobs
-Creates pods until the desired numberof succesful completed jobs is reached.
+Creates pods until the desired numberof succesful completed jobs is reached. 
+
+```
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: thejob
+spec:
+  template:
+    spec:
+      containers:
+        - name: thejob
+          image: ubuntu
+          command: ['date']
+          
+      restartPolicy: Never
+```
+
+```
+kubectl get jobs
+kubectl get pods
+kubectl logs thejob # will print the date
+kubectl delete thejob
+```
+
+```
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: thejob
+spec:
+  shedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      completions: 5
+      parallelism: 5
+      template:
+        spec:
+          containers:
+          - name: ...
+            image: ...
+          
+          
+          restartPolicy: Never
+```
