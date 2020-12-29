@@ -525,3 +525,48 @@ spec:
         - cat
         - /app/is_ready
 ```
+## Liveness probes
+Liveness probes are defined just like the readiness probes:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp
+  labels:
+    name: webapp
+spec:
+  conta8iners:
+  - name: webapp
+    image: webapp
+    ports:
+      - containerPort: 8080
+    livenessProbe:
+      httpGet:
+        path: /api/ready
+        port: 8080
+    
+```
+
+```
+    livenessProbe:
+      httpGet:
+        path: /api/ready
+        port: 8080
+      initialDelaySeconds: 10 #additional deleya
+      periodSeconds: 5 #how often to probe
+      failureThreshold: 8 #default is 3
+```
+
+```
+    livenessProbe:
+      tcpSocket:
+        port: 3306
+```
+
+```
+    livenessProbe:
+      exec:
+        command: 
+        - cat
+        - /app/is_ready
+```
