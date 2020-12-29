@@ -495,7 +495,7 @@ spec:
     image: webapp
     ports:
       - containerPort: 8080
-    resdinessProbe:
+    readinessProbe:
       httpGet:
         path: /api/ready
         port: 8080
@@ -503,7 +503,7 @@ spec:
 ```
 
 ```
-    resdinessProbe:
+    readinessProbe:
       httpGet:
         path: /api/ready
         port: 8080
@@ -513,13 +513,13 @@ spec:
 ```
 
 ```
-    resdinessProbe:
+    readinessProbe:
       tcpSocket:
         port: 3306
 ```
 
 ```
-    resdinessProbe:
+    readinessProbe:
       exec:
         command: 
         - cat
