@@ -711,3 +711,29 @@ spec:
           
           restartPolicy: Never
 ```
+
+## PV and PVCs
+
+PV are cluster wide, PVCs and PVs are bond with a one-to-one relationship. PersistentVolumeclaim tag can be used in the volum tag  of pods, replica sets, deployments. 
+
+For a PVC, a PV with sufficient volume is found, but you can always use labels and selectors to get the PV you want. When a PV is bigger than its PVC, the reaining space remaints unused and can not be claimed. Once a PVC is deleted:
+* PV must be manually deleted
+* PV gets automatically deleted
+* the PV is recycled (data wiped, available again)
+
+NOT IN THE EXAM:
+* storage classes
+* stateful sets
+
+## Storage classes
+What we saw until now was static provisioning. There are provisioners capable of provision volumes dinamically (Dinamic provisioning). When a PVC is created, a storage class will create a PV automatically. A storage class definition will define the provisioner to use.
+
+## Stateful sets
+Stateful sets are similar to deployments, they create pods in sequantial order (up and running), assign unique newtwork ids,assign names and numbers (not random names), but you can still ask thme to create pods in parallel. Deletion is done in reverse order. 
+  
+Use a volume claim template when you need to define automatically a PVC for ach pod of a statefull set.
+
+## Services
+A service is a DNS entry to a pod name. A service is not a load balancer.
+DNS entry to each pod has the following structure: `<pod-name>.<headless-service-name>.<namespace>.<svc>.<cluster-domain>.<app>`.
+A Service definition file creates a headless service.
