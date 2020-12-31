@@ -712,18 +712,85 @@ spec:
           restartPolicy: Never
 ```
 
+## Volumes
+
+Mounting a volume in a pod and adding it to the containers, but a folder on multiple containers has the problem of data allineation, you need a a cluster storage replicationn strategy (GlusterFS for example):
+```
+apiVersion: v1
+kind: Pod
+metadata:
+ name: application
+spec:
+ containers:
+ - image: alpine
+   name: alpine
+   command: ["/bin/sh","-c"]
+   args: ...
+   volumeMounts:
+   - mountPath: /opt
+     name: volume
+  
+  volumes:
+  - name: volume
+  hostPath:
+    path: /data
+    type: Directory
+```
+
 ## PV and PVCs
 
 PV are cluster wide, PVCs and PVs are bond with a one-to-one relationship. PersistentVolumeclaim tag can be used in the volum tag  of pods, replica sets, deployments. 
 
-For a PVC, a PV with sufficient volume is found, but you can always use labels and selectors to get the PV you want. When a PV is bigger than its PVC, the reaining space remaints unused and can not be claimed. Once a PVC is deleted:
-* PV must be manually deleted
-* PV gets automatically deleted
-* the PV is recycled (data wiped, available again)
+For a PVC, a PV with sufficient volume is found, but you can always use labels and selectors to get the PV you want. When a PV is bigger than its PVC, the reaining space remaints unused and can not be claimed. Once a PVC is deleted, behaviour depends upon `persistentVolumeReclaimPolicy`:
+* Retain, PV must be manually deleted
+* Delete, PV gets automatically deleted
+* Recycle, the PV is recycled (data wiped, available again)
+
 
 NOT IN THE EXAM:
 * storage classes
 * stateful sets
+
+
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pvol
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 6Gi
+  hostPath:
+    path: /tmp/data
+```
+
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvolclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+```
+
+PV:
+```
+labels: 
+  name: pv-n
+```
+
+PVC:
+```
+selector:
+  matchLabels:
+    name: pv-n
+```
 
 ## Storage classes
 What we saw until now was static provisioning. There are provisioners capable of provision volumes dinamically (Dinamic provisioning). When a PVC is created, a storage class will create a PV automatically. A storage class definition will define the provisioner to use.
