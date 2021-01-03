@@ -804,3 +804,13 @@ Use a volume claim template when you need to define automatically a PVC for ach 
 A service is a DNS entry to a pod name. A service is not a load balancer.
 DNS entry to each pod has the following structure: `<pod-name>.<headless-service-name>.<namespace>.<svc>.<cluster-domain>.<app>`.
 A Service definition file creates a headless service.
+
+## Services
+Ports:
+* Node Port
+* Service Port
+* Target Port (Port of a pod)
+
+Services can be createsi via definition files.
+It does use a random algorithm to load balance of the labels/selectors identify multiple istances of the same pod.
+
