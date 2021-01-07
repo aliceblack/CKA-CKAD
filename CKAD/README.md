@@ -65,7 +65,8 @@ kubectl run <pod-name> --image=<image> --port=80 --expose
 Creating a pod:
 ```
 controlplane $ kubectl run nginx --image=nginx --dry-run=client -o yaml
-apiVersion: v1kind: Pod
+apiVersion: v1
+kind: Pod
 metadata:
   creationTimestamp: null
   labels:
@@ -82,6 +83,19 @@ status: {}
 controlplane $ kubectl run nginx --image=nginx
 pod/nginx created
 ```
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: colors
+spec:
+  containers:
+  - image: nginx
+    name: blue
+  - image: nginx
+```
+
 
 ## Containers
 Containers run tasks and processes, at completion they do exit. 
