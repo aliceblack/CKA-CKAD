@@ -174,6 +174,8 @@ Show all:
 ```
 kubectl get pods --all-namespaces
 kubectl get namespace
+kubectl describe pod <pod> --namespace=<namespace>
+kubectl describe pod <pod> --n=<namespace>
 ```
 
 Create:
