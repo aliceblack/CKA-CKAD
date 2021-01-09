@@ -603,9 +603,9 @@ spec:
 Multiple containers pod require you to specify the name of the contianer:
 ```
 #single container pod
-logs -f <pod-name>
+kubectl logs -f <pod-name>
 #multy container pod
-logs -f <pod-name> <container-of-the-pod>
+kubectl logs -f <pod-name> <container-of-the-pod>
 ```
 
 ## Labels
