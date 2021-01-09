@@ -682,7 +682,22 @@ the command  `kubectl set image deployment/webapp-deployment nginx=nginx:latest`
 
 Use the `--revision=<revision-number>` flag to see the status of a revision, `kubectl rollout status deployment/webapp-deployment --revision=3`, use the `--record` flag to add the command used to update a delployment to teh revision number, `kubectl set image deployment nginx nginx=nginx:latest --record`.
 
-  
+```
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+    
+ spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2        # how many pods we can add at a time
+      maxUnavailable: 0  # maxUnavailable define how many pods can be unavailable
+                         # during the rolling update
+```
+
 ## Jobs
 Creates pods until the desired numberof succesful completed jobs is reached. 
 
