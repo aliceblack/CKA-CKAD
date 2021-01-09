@@ -753,6 +753,9 @@ spec:
           restartPolicy: Never
 ```
 
+
+Remember to set backoff limit of jobs and chronjobs if needed.
+
 ## Volumes
 
 Mounting a volume in a pod and adding it to the containers, but a folder on multiple containers has the problem of data allineation, you need a a cluster storage replicationn strategy (GlusterFS for example):
