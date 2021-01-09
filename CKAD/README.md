@@ -722,6 +722,14 @@ kubectl get jobs
 kubectl get pods
 kubectl logs thejob # will print the date
 kubectl delete thejob
+kubectl describe job difficult-job # show how much something took
+```
+
+Job with completions:
+```
+spec:
+  completions: 3
+  parallelism: 3 #if needed
 ```
 
 ```
@@ -730,7 +738,7 @@ kind: CronJob
 metadata:
   name: thejob
 spec:
-  shedule: "*/1 * * * *"
+  shedule: "*/1 * * * *" #chronjobs have this nice shedule tag
   jobTemplate:
     spec:
       completions: 5
