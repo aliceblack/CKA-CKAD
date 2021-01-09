@@ -623,6 +623,8 @@ metadata:
 Get the pod using the lables:
 ```
 kubectl get pods --selector application=gui
+kubectl get all --selector application=gui
+kubectl get all --selector env=prod,color=blue,mode=mobile
 ```
 
 Replica set definition:
