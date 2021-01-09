@@ -762,6 +762,9 @@ For a PVC, a PV with sufficient volume is found, but you can always use labels a
 * Delete, PV gets automatically deleted
 * Recycle, the PV is recycled (data wiped, available again)
 
+```
+kubectl get pvc
+```
 
 NOT IN THE EXAM:
 * storage classes
@@ -806,6 +809,29 @@ PVC:
 selector:
   matchLabels:
     name: pv-n
+```
+
+Pod:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+spec:
+  containers:
+  - name: app_0
+    image: app_0
+	env:
+	- name: logs
+	  value: file
+	volumeMounts:
+	- mounthPath: /log
+	  name: myvolume
+	
+  volumes:
+  - name: myvolume
+    persistentVolumeClaim:
+	  claimName: myclaimname
 ```
 
 ## Storage classes
