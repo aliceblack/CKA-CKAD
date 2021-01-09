@@ -518,7 +518,7 @@ metadata:
   labels:
     name: webapp
 spec:
-  conta8iners:
+  containers:
   - name: webapp
     image: webapp
     ports:
