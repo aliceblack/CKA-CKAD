@@ -830,3 +830,14 @@ Ports:
 Services can be createsi via definition files.
 It does use a random algorithm to load balance of the labels/selectors identify multiple istances of the same pod.
 
+## Metrics server
+Use just for testing:
+```
+#deploy metric server
+git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
+cd kubernetes-metrics-server/
+kubectl create -f .
+#check how it is going
+kubectl top node 
+kubectl top pod
+```
