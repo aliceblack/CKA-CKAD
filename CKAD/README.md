@@ -837,6 +837,19 @@ spec:
 ## Storage classes
 What we saw until now was static provisioning. There are provisioners capable of provision volumes dinamically (Dinamic provisioning). When a PVC is created, a storage class will create a PV automatically. A storage class definition will define the provisioner to use.
 
+```
+# get storage classes:
+kubectl get sc
+
+#storage class:
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: scvolume
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirtsConsumer
+```
+
 ## Stateful sets
 Stateful sets are similar to deployments, they create pods in sequantial order (up and running), assign unique newtwork ids,assign names and numbers (not random names), but you can still ask thme to create pods in parallel. Deletion is done in reverse order. 
   
