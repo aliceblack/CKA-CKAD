@@ -16,6 +16,7 @@ Useful commands:
 kubectl get cluster-info
 kubectl get nodes
 kubectl get all
+kubectl create namespace my-space
 ```
 
 Kubectl advanced commands:
@@ -25,6 +26,8 @@ kubectl get pods -o wide
 #--dry-run to immediately create the resource, --dry-run=client to see if the resource can be created, -o yaml to generate a resource defionition file
 #generate pod maniffest but does not create it
 kubectl run nginx --image=nginx  --dry-run=client -o yaml
+#create a service to make ingress available
+kubectl expose deployment -n my-space ingress-controller --type=NodePort --port=80 --name=ingress --dry-run -o yaml >ingress.yaml
 ```
 
 ## Pods
@@ -927,6 +930,7 @@ kubectl top pod
 ## Netrwork policies
 
 ```
+apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: internal-policy
@@ -954,4 +958,27 @@ spec:
 	   protocol: UDP
      - port: 53
 	   protocol: TCP
+```
+
+## Ingress
+```
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: my-space
+  annotation:
+    nginx.ingress.kuberenetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+	  - path: /thepath
+	    backend:
+		  serviceName: my-service
+```
+		  servicePort: 8080
+
+```
+kubectl get ingress --all-namespaces
 ```
