@@ -897,6 +897,21 @@ Ports:
 Services can be createsi via definition files.
 It does use a random algorithm to load balance of the labels/selectors identify multiple istances of the same pod.
 
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 8080
+	  port: 8080
+	  nodePort: 3000
+  selector:
+    name: application
+```
+
 ## Metrics server
 Use just for testing:
 ```
