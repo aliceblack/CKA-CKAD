@@ -923,3 +923,35 @@ kubectl create -f .
 kubectl top node 
 kubectl top pod
 ```
+
+## Netrwork policies
+
+```
+kind: NetworkPolicy
+metadata:
+  name: internal-policy
+  namespace: default
+spec:
+  podSelector:
+    mathLables:
+	  name: internal
+  policyType:
+  - Egress
+  - Ingress
+  ingress:
+    - {}
+  egress:
+  - to:
+    - podSelector:
+	    matchLabels:
+		  name: mysql
+	ports:
+	- protocol: TCP
+	  port: 3306
+	  
+   - ports:
+     - port: 53
+	   protocol: UDP
+     - port: 53
+	   protocol: TCP
+```
